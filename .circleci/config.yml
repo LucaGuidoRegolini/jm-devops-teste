@@ -64,9 +64,18 @@ jobs:
           name: Terraform version
           command:  terraform --version
       
-      - run: terraform init
-      - run: terraform plan
-      - run: terraform apply -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC" -auto-approve
+      - run: 
+          name: Terraform init
+          command: terraform init
+          working_directory: ./terraform/dev
+      - run: 
+          name: Terraform plan
+          command: terraform plan -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
+          working_directory: ./terraform/dev
+      - run: 
+          name: Terraform apply
+          command: terraform apply -auto-approve -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
+          working_directory: ./terraform/dev
           
          
 
