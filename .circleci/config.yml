@@ -62,11 +62,6 @@ jobs:
         - run:
             name: Terraform version
             command:  terraform --version
-        
-        # Execute o Terraform
-        # - run: terraform init
-        # - run: terraform plan
-        # - run: terraform apply -auto-approv
           
          
 
@@ -78,6 +73,12 @@ workflows:
     jobs:
       - test
       - push-to-ecr:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - run-terraform:
           requires:
             - test
           filters:
