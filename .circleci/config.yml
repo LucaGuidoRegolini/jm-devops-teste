@@ -85,14 +85,6 @@ jobs:
           command: terraform apply -auto-approve -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
           working_directory: ./terraform/dev
 
-      # - run:
-      #     name: Configurar SSH
-      #     command: echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-
-      - add_ssh_keys:
-          fingerprints: 
-            - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
-
       - run:
           name: Install Ansible
           command: sudo apt-get update && sudo apt-get install -y ansible
@@ -116,6 +108,10 @@ jobs:
           name: get hosts.ini
           command: cat hosts.ini
           working_directory: ./terraform/dev
+
+      - add_ssh_keys:
+          fingerprints: 
+            - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
       
       - run:
           name: Ansible playbook
