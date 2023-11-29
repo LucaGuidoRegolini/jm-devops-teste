@@ -84,6 +84,35 @@ jobs:
           name: Terraform apply
           command: terraform apply -auto-approve -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
           working_directory: ./terraform/dev
+
+      - run:
+          name: Get instance IP
+          command: instance_ip=$(terraform output DEVELOP_IP)
+          working_directory: ./terraform/dev
+
+      - run:
+          name: Create SSH key file
+          command: echo "$SSH_KEY_PRIVATE" > ssh_key && chmod 400 ssh_key
+          working_directory: ./terraform/dev
+
+      - run:
+          name: Install Ansible
+          command: sudo apt-get update && sudo apt-get install -y ansible
+
+      - run:
+          name: Ansible version
+          command: ansible --version
+
+
+      - run:
+          name: Create Ansible hosts file
+          command: echo "[Terraform_ansible]" > hosts.ini && echo "${instance_ip}" >> hosts.ini
+          working_directory: ./terraform/dev
+      
+      - run:
+          name: Ansible playbook
+          command: ansible-playbook -i ./terraform/dev/hosts.ini ./ansible/playbook.yml --private-key ./ssh_key
+          working_directory: ./terraform/dev
           
          
 
