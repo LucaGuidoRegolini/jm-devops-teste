@@ -117,7 +117,7 @@ jobs:
       
       - run:
           name: Ansible playbook
-          command: ansible-playbook -i ./terraform/dev/hosts.ini playbook.yml --private-key ./ssh_key
+          command: ansible-playbook -i ./hosts.ini playbook.yml --private-key ./ssh_key
           working_directory: ./terraform/dev
           
          
