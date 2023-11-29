@@ -112,7 +112,7 @@ jobs:
 
       - run: 
           name: get ssh key
-          command: cat ssh_key
+          command: cat ssh_key.pem
           working_directory: ./terraform/dev
       - run: 
           name: get hosts.ini
