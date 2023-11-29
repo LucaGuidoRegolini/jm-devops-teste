@@ -112,7 +112,7 @@ jobs:
 
       - run: 
           name: Ansible hosts file
-          command: echo hosts.ini
+          command: cat hosts.ini
           working_directory: ./terraform/dev
       
       - run:
