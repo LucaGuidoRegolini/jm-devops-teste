@@ -16,4 +16,6 @@ resource "aws_instance" "app_server" {
     Environment = var.environment
     Terraform: "true"
   }
+
+  depends_on = [ aws_key_pair.aws_key_pair ]
 }

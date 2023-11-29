@@ -1,4 +1,4 @@
-resource "aws_key_pair" "iac-mundo_invest" {
+resource "aws_key_pair" "aws_key_pair" {
   key_name   = var.ssh_key_name
   public_key = var.ssh_key_public
 
