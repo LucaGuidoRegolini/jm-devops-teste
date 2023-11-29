@@ -87,7 +87,7 @@ jobs:
 
       - run:
           name: Create SSH key file
-          command: echo "$SSH_KEY_PRIVATE" > ssh_key && chmod 400 ssh_key
+          command: echo $SSH_KEY_PRIVATE > ssh_key && chmod 400 ssh_key
           working_directory: ./terraform/dev
 
       - run:
