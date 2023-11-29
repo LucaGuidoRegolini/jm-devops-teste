@@ -4,6 +4,8 @@ version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
+orbs:
+  node: circleci/node@5.1.0
 
 jobs:
   checkout-code:
@@ -19,9 +21,13 @@ jobs:
 
   test-code:
     docker:
-      - image: circleci/node:18.04
+      - image: cimg/base:stable
     steps:
       - checkout
+      - node/install:
+          install-yarn: true
+          node-version: '16.13'
+      - run: node --version
       - run:
           name: Run Tests
           command: npm run test
