@@ -108,6 +108,12 @@ jobs:
           name: Create Ansible hosts file
           command: echo "[Terraform_ansible]" > hosts.ini && echo "${instance_ip}" >> hosts.ini
           working_directory: ./terraform/dev
+
+
+      - run: 
+          name: Ansible hosts file
+          command: echo hosts.ini
+          working_directory: ./terraform/dev
       
       - run:
           name: Ansible playbook
