@@ -112,7 +112,7 @@ jobs:
       
       - run:
           name: Ansible playbook
-          command: ansible-playbook -i hosts.ini playbook.yml --private-key ./ssh_key
+          command: ansible-playbook -i hosts.ini playbook.yml --key-file ./ssh_key
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
