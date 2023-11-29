@@ -65,6 +65,10 @@ jobs:
           command:  terraform --version
 
       - run:
+          name: Install AWS CLI
+          command: sudo apt-get update && sudo apt-get install awscli
+
+      - run:
           name: Config AWS account
           command: aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && aws configure set default.region $AWS_REGION
       
