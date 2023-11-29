@@ -45,6 +45,30 @@ jobs:
           name: Push to ECR
           command: docker tag app:latest $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com/jm-develops-test:latest && docker push $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com/jm-develops-test:latest
 
+    run-terraform:
+      docker:
+        - image: cimg/base:stable
+      steps:
+        - checkout
+        - setup_remote_docker
+        - run: 
+            name: Install Terraform dependencies
+            comand: sudo apt-get update && sudo apt-get install -y unzip
+
+        - run:
+            name: Install Terraform
+            command:  curl -fsSL https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip -o terraform.zip && sudo unzip terraform.zip -d /usr/local/bin
+
+        - run:
+            name: Terraform version
+            command:  terraform --version
+        
+        # Execute o Terraform
+        # - run: terraform init
+        # - run: terraform plan
+        # - run: terraform apply -auto-approv
+          
+         
 
 
 # Orchestrate jobs using workflows
