@@ -94,6 +94,10 @@ jobs:
           name: Create SSH key file
           command: echo "$SSH_KEY_PRIVATE" > ssh_key && chmod 400 ssh_key
           working_directory: ./terraform/dev
+      - persist_to_workspace:
+              root: .
+              paths:
+                - ssh_key
 
       - run:
           name: Install Ansible
@@ -106,8 +110,12 @@ jobs:
 
       - run:
           name: Create Ansible hosts file
-          command: echo "[Terraform_ansible]" > hosts.ini && echo "${instance_ip}" >> hosts.ini
+          command: echo "[Terraform_ansible]" > hosts.ini && echo "$(terraform output DEVELOP_IP)" >> hosts.ini
           working_directory: ./terraform/dev
+      - persist_to_workspace:
+              root: .
+              paths:
+                - hosts.ini
 
 
       - run: 
@@ -117,9 +125,23 @@ jobs:
       
       - run:
           name: Ansible playbook
-          command: ansible-playbook -i ./hosts.ini playbook.yml --private-key ./ssh_key
+          command: ansible-playbook -i hosts.ini playbook.yml --private-key ./ssh_key
           working_directory: ./terraform/dev
-          
+
+  start-project: 
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run: 
+          name: get ssh key
+          command: cat ssh_key
+          working_directory: ./terraform/dev
+      - run: 
+          name: get ssh key
+          command: cat ssh_key
          
 
 
@@ -138,6 +160,13 @@ workflows:
       - run-terraform:
           requires:
             - test
+          filters:
+            branches:
+              only: master
+      - start-project:
+          requires:
+            - run-terraform
+            - push-to-ecr
           filters:
             branches:
               only: master
