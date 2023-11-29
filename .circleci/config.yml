@@ -45,7 +45,7 @@ jobs:
           name: Push to ECR
           command: docker tag app:latest $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com/jm-develops-test:latest && docker push $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com/jm-develops-test:latest
 
-    run-terraform:
+    create-infra:
       docker:
         - image: cimg/base:stable
       steps:
@@ -78,7 +78,7 @@ workflows:
           filters:
             branches:
               only: master
-      - run-terraform:
+      - create-infra:
           requires:
             - test
           filters:
