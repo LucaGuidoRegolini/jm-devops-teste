@@ -36,6 +36,13 @@ jobs:
       - run:
           name: Authenticate with ECR
           command: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com/jm-develops-test
+      - run:
+          name: Build Docker Image
+          command: docker build -t app:latest .
+          working_directory: ./app
+      - run:
+          name: Push to ECR
+          command: docker tag app:latest $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com/jm-develops-test:latest && docker push $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com/jm-develops-test:latest
 
 
 
