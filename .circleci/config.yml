@@ -28,6 +28,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: apt-get update
+          command: sudo apt-get update
+      - run:
           name: Install AWS CLI
           command: sudo apt-get install awscli
       - run:
