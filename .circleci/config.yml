@@ -8,7 +8,7 @@ orbs:
   node: circleci/node@5.1.0
 
 jobs:
-  deploy:
+  test:
     docker:
       - image: cimg/base:stable
     steps:
@@ -21,8 +21,15 @@ jobs:
           name: Run Tests
           command: npm run test
           working_directory: ./app
-      - run: echo $SECRET
 
+  push-to-ecr:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with ECR
+          command: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_USER_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
 
 
@@ -31,7 +38,10 @@ jobs:
 workflows:
   deploy-workflow:
     jobs:
-      - deploy:
+      - test
+      - push-to-ecr:
+          requires:
+            - test
           filters:
             branches:
               only: master
