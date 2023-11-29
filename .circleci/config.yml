@@ -86,9 +86,8 @@ jobs:
           working_directory: ./terraform/dev
 
       - run:
-          name: Create SSH key file
-          command: echo $SSH_KEY_PRIVATE > ssh_key.pem && chmod 400 ssh_key.pem
-          working_directory: ./terraform/dev
+          name: Configurar SSH
+          command: echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
 
       - run:
           name: Install Ansible
@@ -121,7 +120,7 @@ jobs:
       
       - run:
           name: Ansible playbook
-          command: ansible-playbook -i hosts.ini playbook.yml --key-file ssh_key.pem
+          command: ansible-playbook -i hosts.ini playbook.yml
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
