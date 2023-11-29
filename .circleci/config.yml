@@ -109,11 +109,6 @@ jobs:
               paths:
               - hosts.ini
               - ssh_key
-
-      - run: 
-          name: Ansible hosts file
-          command: cat hosts.ini
-          working_directory: ./terraform/dev
       
       - run:
           name: Ansible playbook

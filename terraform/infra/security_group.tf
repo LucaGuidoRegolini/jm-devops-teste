@@ -28,3 +28,12 @@ resource "aws_security_group_rule" "tcp_alb_ingress_ssh" {
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.alb.id
 }
+
+resource "aws_security_group_rule" "tcp_alb_egress" {
+  type              = "egress"
+  from_port         = 0 # 0 - 0 all ports
+  to_port           = 0
+  protocol          = "-1"          # -1 all protocols
+  cidr_blocks       = ["0.0.0.0/0"] # 0.0.0.0 - 255.255.255.255
+  security_group_id = aws_security_group.alb.id
+}
