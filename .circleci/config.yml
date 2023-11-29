@@ -18,10 +18,9 @@ jobs:
 
   test-code:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:stable
     steps:
       - checkout
-      - run: echo "Testing code"
       - run:
           name: Run Tests
           command: npm run test
