@@ -145,7 +145,7 @@ workflows:
           filters:
             branches:
               only: master
-      - start-project:
+      - run-ansible:
           requires:
             - run-terraform
             - push-to-ecr
