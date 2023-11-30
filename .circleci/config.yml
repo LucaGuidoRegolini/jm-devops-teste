@@ -115,14 +115,6 @@ jobs:
       - run:
           name: Ansible version
           command: ansible --version
-      
-      # - add_ssh_keys:
-      #     fingerprints: 
-      #       - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
-
-      # - run:
-      #     name: Create ssh file
-      #     command: echo ${SSH_KEY} > ~/.ssh/id_rsa_project && chmod 600 ~/.ssh/id_rsa_project
 
       - run:
           name: Install AWS CLI
@@ -135,13 +127,6 @@ jobs:
       - run:
           name: Download ssh key
           command: aws s3 cp s3://terraform-jm-devops-dev-terraform-state/ssh.pem ./ssh.pem
-
-      - run:
-          name: ls ssh keys
-          command: |
-            cd ~/.ssh
-            ls -la
-            cat id_rsa_project
             
       - run:
           name: Ansible playbook
