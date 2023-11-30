@@ -90,6 +90,11 @@ jobs:
           command: echo "[Terraform_ansible]" > hosts.ini && echo "$(terraform output DEVELOP_IP)" >> hosts.ini
           working_directory: ./terraform/dev
 
+      - run: 
+          name: get hosts.ini
+          command: cat hosts.ini
+          working_directory: ./terraform/dev
+
       - persist_to_workspace:
               root: ./terraform/dev
               paths:
