@@ -52,7 +52,7 @@ Essa é uma aplicação NodeJS.
 ## Bônus
 Converter os dados da Receita Federal para CVS e dispobinilizar no local a sua escolha. Recomendamos um Bucket S3.
 
-Dados: http://200.152.38.155/CNPJ/DADOS_ABERTOS_CNPJ_01.zip
+Dados: http://200.152.38.155/CNPJ/DADOS_ABERTOS_CNPJ_01.zip -> esta em manutenção 😞
 
 Dados Receita: http://receita.economia.gov.br/orientacao/tributaria/cadastros/cadastro-nacional-de-pessoas-juridicas-cnpj/dados-publicos-cnpj
 
