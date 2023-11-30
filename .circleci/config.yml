@@ -90,12 +90,12 @@ jobs:
           command: |
             rm -f hosts.ini
             echo "[Terraform_ansible]" > hosts.ini
-            echo "$TF_IP" >> hosts.ini
+            echo "$(terraform output DEVELOP_IP)" >> hosts.ini
           working_directory: ./terraform/dev
 
       - run:
           name: Add host to known_hosts
-          command: ssh-keyscan -H "$(terraform output DEVELOP_IP)" >> ~/.ssh/known_hosts
+          command: ssh-keyscan -H $(terraform output DEVELOP_IP) >> ~/.ssh/known_hosts
 
 
       - run:
@@ -156,13 +156,6 @@ workflows:
               only: master
       - run-terraform:
           requires:
-            - test
-          filters:
-            branches:
-              only: master
-      - run-ansible:
-          requires:
-            - run-terraform
             - push-to-ecr
           filters:
             branches:
