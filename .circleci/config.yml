@@ -122,7 +122,7 @@ jobs:
 
       - run:
           name: Create ssh file
-          command: echo ${SSH_KEY} > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          command: echo ${SSH_KEY} > ~/.ssh/id_rsa_project && chmod 600 ~/.ssh/id_rsa_project
 
       - run:
           name: ls ssh keys
@@ -133,7 +133,7 @@ jobs:
             
       - run:
           name: Ansible playbook
-          command: sudo ansible-playbook -i hosts.ini playbook.yml  -vvv --private-key ~/.ssh/id_rsa
+          command: sudo ansible-playbook -i hosts.ini playbook.yml  -vvv --private-key ~/.ssh/id_rsa_project
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
