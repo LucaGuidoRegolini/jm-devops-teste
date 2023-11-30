@@ -120,9 +120,21 @@ jobs:
       #     fingerprints: 
       #       - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
 
+      # - run:
+      #     name: Create ssh file
+      #     command: echo ${SSH_KEY} > ~/.ssh/id_rsa_project && chmod 600 ~/.ssh/id_rsa_project
+
       - run:
-          name: Create ssh file
-          command: echo ${SSH_KEY} > ~/.ssh/id_rsa_project && chmod 600 ~/.ssh/id_rsa_project
+          name: Install AWS CLI
+          command: sudo apt-get update && sudo apt-get install awscli
+
+      - run:
+          name: Config AWS account
+          command: aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && aws configure set default.region $AWS_REGION
+
+      - run:
+          name: Download ssh key
+          command: aws s3 cp s3://jm-develops-test/ssh.pem ./ssh.pem
 
       - run:
           name: ls ssh keys
