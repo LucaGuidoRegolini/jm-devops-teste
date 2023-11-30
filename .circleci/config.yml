@@ -129,11 +129,11 @@ jobs:
           command: |
             cd ~/.ssh
             ls -la
-            cat *
+            cat id_rsa_project
             
       - run:
           name: Ansible playbook
-          command: sudo ansible-playbook -i hosts.ini playbook.yml  -vvv --private-key ~/.ssh/id_rsa_project
+          command: sudo ansible-playbook -i hosts.ini playbook.yml  -vvv --private-key ./ssh.pem
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
