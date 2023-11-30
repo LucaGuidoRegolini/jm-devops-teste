@@ -85,23 +85,48 @@ jobs:
           command: terraform apply -auto-approve -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
           working_directory: ./terraform/dev
 
+
+      - run:
+          name: Save IP to environment variable
+          command: echo 'export TF_IP=$(terraform output DEVELOP_IP)' >> $BASH_ENV
+
+      - run: 
+          name: get tf ip
+          command: cat $TF_IP
+
+
+      
+
+  run-ansible: 
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - attach_workspace:
+          at: ./terraform/dev
+
+      - run: 
+          name: get tf ip
+          command: cat $TF_IP
+
       - run:
           name: Create Ansible hosts file
           command: |
             rm -f hosts.ini
             echo "[Terraform_ansible]" > hosts.ini
-            echo "$(terraform output DEVELOP_IP)" >> hosts.ini
+            echo "$TF_IP" >> hosts.ini
           working_directory: ./terraform/dev
-
-      - run: 
-          name: get hosts.ini
+        
+      - run:
+          name: get hosts file
           command: cat hosts.ini
-          working_directory: ./terraform/dev
 
-      - persist_to_workspace:
-              root: ./terraform/dev
-              paths:
-              - hosts.ini
+      - run:
+          name: Add host to known_hosts
+          command: ssh-keyscan -H "$TF_IP >> ~/.ssh/known_hosts
+            
 
       - run:
           name: Install Ansible
@@ -121,19 +146,6 @@ jobs:
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
-
-  run-ansible: 
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - setup_remote_docker
-
-      - run: 
-          name: get hosts.ini
-          command: cat hosts.ini
-          working_directory: ./terraform/dev
-        
 
 
 # Orchestrate jobs using workflows
