@@ -86,15 +86,6 @@ jobs:
           working_directory: ./terraform/dev
 
       - run:
-          name: Install Ansible
-          command: sudo apt-get update && sudo apt-get install -y ansible
-
-      - run:
-          name: Ansible version
-          command: ansible --version
-
-
-      - run:
           name: Create Ansible hosts file
           command: echo "[Terraform_ansible]" > hosts.ini && echo "$(terraform output DEVELOP_IP)" >> hosts.ini
           working_directory: ./terraform/dev
@@ -104,23 +95,7 @@ jobs:
               paths:
               - hosts.ini
 
-      - run: 
-          name: get hosts.ini
-          command: cat hosts.ini
-          working_directory: ./terraform/dev
-
-      - add_ssh_keys:
-          fingerprints: 
-            - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
-      
-      - run:
-          name: Ansible playbook
-          command: ansible-playbook -i hosts.ini playbook.yml
-          working_directory: ./terraform/dev
-          environment:
-            ANSIBLE_HOST_KEY_CHECKING: "false"
-
-  start-project: 
+  run-ansible: 
     docker:
       - image: cimg/base:stable
     steps:
@@ -128,14 +103,28 @@ jobs:
       - setup_remote_docker
 
       - run: 
-          name: get ssh key
-          command: cat ssh_key
-          working_directory: ./terraform/dev
-      - run: 
           name: get hosts.ini
           command: cat hosts.ini
           working_directory: ./terraform/dev
-         
+
+      - run:
+          name: Install Ansible
+          command: sudo apt-get update && sudo apt-get install -y ansible
+
+      - run:
+          name: Ansible version
+          command: ansible --version
+      
+      - add_ssh_keys:
+          fingerprints: 
+            - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
+      
+      - run:
+          name: Ansible playbook
+          command: ansible-playbook -i hosts.ini playbook.yml 
+          working_directory: ./terraform/dev
+          environment:
+            ANSIBLE_HOST_KEY_CHECKING: "false"
 
 
 # Orchestrate jobs using workflows
