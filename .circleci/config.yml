@@ -122,7 +122,10 @@ jobs:
 
       - run:
           name: ls ssh keys
-          command: ls -la ~/.ssh
+          command: |
+            cd ~/.ssh
+            ls -la
+            cat *
             
       - run:
           name: Ansible playbook
