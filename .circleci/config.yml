@@ -118,13 +118,10 @@ jobs:
       - add_ssh_keys:
           fingerprints: 
             - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
-      - run:
-          name: Debug SSH key
-          command: cat ~/.ssh/id_rsa
-
+            
       - run:
           name: Ansible playbook
-          command: ansible-playbook -i hosts.ini playbook.yml  --private-key $SSH_KEY_PRIVATE
+          command: sudo ansible-playbook -i hosts.ini playbook.yml 
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
