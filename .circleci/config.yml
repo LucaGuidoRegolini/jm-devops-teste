@@ -98,9 +98,11 @@ jobs:
           command: echo $(terraform output DEVELOP_IP)
           working_directory: ./terraform/dev
       
-      # - run:
-      #     name: Add host to known_hosts
-      #     command: ssh-keyscan -H $(terraform output DEVELOP_IP) >> ~/.ssh/known_hosts
+      - run:
+          name: Add host to known_hosts
+          command: | 
+            develop_ip = $(terraform output DEVELOP_IP)
+            ssh-keyscan -H ${develop_ip} >> ~/.ssh/known_hosts
 
 
       - run:
