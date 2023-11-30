@@ -87,7 +87,10 @@ jobs:
 
       - run:
           name: Create Ansible hosts file
-          command: echo "[Terraform_ansible]" > hosts.ini && echo "$(terraform output DEVELOP_IP)" >> hosts.ini
+          command: |
+            rm -f hosts.ini
+            echo "[Terraform_ansible]" > hosts.ini
+            echo "$(terraform output DEVELOP_IP)" >> hosts.ini
           working_directory: ./terraform/dev
 
       - run: 
