@@ -103,18 +103,6 @@ jobs:
               paths:
               - hosts.ini
 
-  run-ansible: 
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - setup_remote_docker
-
-      - run: 
-          name: get hosts.ini
-          command: cat hosts.ini
-          working_directory: ./terraform/dev
-
       - run:
           name: Install Ansible
           command: sudo apt-get update && sudo apt-get install -y ansible
@@ -133,6 +121,18 @@ jobs:
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
+
+  run-ansible: 
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run: 
+          name: get hosts.ini
+          command: cat hosts.ini
+          working_directory: ./terraform/dev
         
 
 
