@@ -127,6 +127,7 @@ jobs:
       - run:
           name: Download ssh key
           command: aws s3 cp s3://terraform-jm-devops-dev-terraform-state/ssh.pem ./ssh.pem
+          working_directory: ./terraform/dev
             
       - run:
           name: Ansible playbook
