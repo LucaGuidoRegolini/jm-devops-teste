@@ -78,11 +78,11 @@ jobs:
           working_directory: ./terraform/dev
       - run: 
           name: Terraform plan
-          command: terraform plan -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
+          command: terraform plan
           working_directory: ./terraform/dev
       - run: 
           name: Terraform apply
-          command: terraform apply -auto-approve -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
+          command: terraform apply -auto-approve
           working_directory: ./terraform/dev
 
      
@@ -102,7 +102,7 @@ workflows:
               only: master
       - run-terraform:
           requires:
-            - test
+            - push-to-ecr
           filters:
             branches:
               only: master
