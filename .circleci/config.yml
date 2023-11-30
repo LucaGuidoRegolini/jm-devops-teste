@@ -78,12 +78,64 @@ jobs:
           working_directory: ./terraform/dev
       - run: 
           name: Terraform plan
-          command: terraform plan
+          command: terraform plan -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
           working_directory: ./terraform/dev
       - run: 
           name: Terraform apply
-          command: terraform apply -auto-approve
+          command: terraform apply -auto-approve -var="TF_VAR_ssh_key_public=$TF_VAR_SSH_KEY_PUBLIC"
           working_directory: ./terraform/dev
+
+      - run:
+          name: Create Ansible hosts file
+          command: |
+            rm -f hosts.ini
+            echo "[Terraform_ansible]" > hosts.ini
+            echo "$(terraform output DEVELOP_IP)" >> hosts.ini
+          working_directory: ./terraform/dev
+
+      - persist_to_workspace:
+            root: ./terraform/dev
+            paths:
+              - hosts.ini
+
+  run-ansible: 
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - attach_workspace:
+          at: ./terraform/dev
+        
+      - run:
+          name: get hosts file
+          command: cat hosts.ini
+          working_directory: ./terraform/dev
+
+      # - run:
+      #     name: Add host to known_hosts
+      #     command: ssh-keyscan -H "44.221.152.115" >> ~/.ssh/known_hosts
+
+      - run:
+          name: Install Ansible
+          command: sudo apt-get update && sudo apt-get install -y ansible
+
+      - run:
+          name: Ansible version
+          command: ansible --version
+      
+      - add_ssh_keys:
+          fingerprints: 
+            - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
+            
+      - run:
+          name: Ansible playbook
+          command: sudo ansible-playbook -i hosts.ini playbook.yml 
+          working_directory: ./terraform/dev
+          environment:
+            ANSIBLE_HOST_KEY_CHECKING: "false"
+            
 
      
 
@@ -102,6 +154,13 @@ workflows:
               only: master
       - run-terraform:
           requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - run-ansible:
+          requires:
+            - run-terraform
             - push-to-ecr
           filters:
             branches:
