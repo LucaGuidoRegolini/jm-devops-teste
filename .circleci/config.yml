@@ -93,15 +93,29 @@ jobs:
             echo "$(terraform output DEVELOP_IP)" >> hosts.ini
           working_directory: ./terraform/dev
 
+      - persist_to_workspace:
+            root: ./terraform/dev
+            paths:
+              - hosts.ini
+
+  run-ansible: 
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - attach_workspace:
+          at: ./terraform/dev
+        
       - run:
-          name: Get Terraform IP
-          command: echo $(terraform output DEVELOP_IP)
+          name: get hosts file
+          command: cat hosts.ini
           working_directory: ./terraform/dev
-      
+
       - run:
           name: Add host to known_hosts
           command: ssh-keyscan -H "44.221.152.115" >> ~/.ssh/known_hosts
-
 
       - run:
           name: Install Ansible
@@ -121,27 +135,6 @@ jobs:
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
-
-      
-
-  run-ansible: 
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - setup_remote_docker
-
-      - attach_workspace:
-          at: ./terraform/dev
-
-      - run: 
-          name: get tf ip
-          command: echo $TF_IP
-        
-      - run:
-          name: get hosts file
-          command: cat hosts.ini
-          working_directory: ./terraform/dev
             
 
      
@@ -161,6 +154,13 @@ workflows:
               only: master
       - run-terraform:
           requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - run-ansible:
+          requires:
+            - run-terraform
             - push-to-ecr
           filters:
             branches:
