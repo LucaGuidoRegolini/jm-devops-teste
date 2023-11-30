@@ -19,7 +19,12 @@ jobs:
       - run: node --version
       - run:
           name: Run Tests
-          command: npm run test
+          command: |
+            output=$(npm run test)
+            if [[ "$output" != *"Fake test2"* ]]; then
+              echo "Erro: Error in tests"
+              exit 1
+            fi
           working_directory: ./app
 
   push-to-ecr:
