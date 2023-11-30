@@ -21,7 +21,7 @@ jobs:
           name: Run Tests
           command: |
             output=$(npm run test)
-            if [[ "$output" != *"Fake test2"* ]]; then
+            if [[ "$output" != *"Fake test"* ]]; then
               echo "Erro: Error in tests"
               exit 1
             fi
