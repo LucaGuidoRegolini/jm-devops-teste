@@ -119,6 +119,10 @@ jobs:
       - add_ssh_keys:
           fingerprints: 
             - "4a:f0:09:67:99:fe:19:a9:56:20:eb:69:51:d3:2d:50"
+
+      - run:
+          name: ls ssh keys
+          command: ls -la ~/.ssh
             
       - run:
           name: Ansible playbook
