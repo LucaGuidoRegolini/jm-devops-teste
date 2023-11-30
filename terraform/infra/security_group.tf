@@ -11,6 +11,15 @@ resource "aws_security_group" "alb" {
   }
 }
 
+resource "aws_security_group_rule" "tcp_alb_ingress_http" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.alb.id
+}
+
 resource "aws_security_group_rule" "tcp_alb_ingress_project" {
   type              = "ingress"
   from_port         = 3000
@@ -19,6 +28,7 @@ resource "aws_security_group_rule" "tcp_alb_ingress_project" {
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.alb.id
 }
+
 
 resource "aws_security_group_rule" "tcp_alb_ingress_ssh" {
   type              = "ingress"

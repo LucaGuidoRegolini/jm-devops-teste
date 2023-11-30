@@ -6,4 +6,4 @@ function handleRequest(req, res) {
   res.end()
 }
 
-http.createServer(handleRequest).listen(80)
+http.createServer(handleRequest).listen(3000)
