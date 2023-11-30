@@ -100,9 +100,7 @@ jobs:
       
       - run:
           name: Add host to known_hosts
-          command: | 
-            develop_ip = $(terraform output DEVELOP_IP)
-            ssh-keyscan -H ${develop_ip} >> ~/.ssh/known_hosts
+          command: ssh-keyscan -H "44.221.152.115" >> ~/.ssh/known_hosts
 
 
       - run:
