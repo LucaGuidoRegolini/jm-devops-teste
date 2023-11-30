@@ -131,7 +131,7 @@ jobs:
             
       - run:
           name: Ansible playbook
-          command: sudo ansible-playbook -i hosts.ini playbook.yml  -vvv --private-key ./ssh.pem
+          command: sudo ansible-playbook -i hosts.ini playbook.yml  -vvv --private-key ./ssh.pem -e "AWS_REGION=$AWS_REGION" -e "AWS_USER_ID=$AWS_USER_ID" -e "AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_KEY=$AWS_SECRET_ACCESS_KEY"
           working_directory: ./terraform/dev
           environment:
             ANSIBLE_HOST_KEY_CHECKING: "false"
