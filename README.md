@@ -48,6 +48,7 @@ Essa é uma aplicação NodeJS.
 
 - `npm test` Roda o Fake test da aplicação
 - `npm start` Inicia a aplicação na porta 3000
+- `http://ec2-3-226-114-13.compute-1.amazonaws.com:3000` Site com o projeto online
 
 ## Bônus
 Converter os dados da Receita Federal para CVS e dispobinilizar no local a sua escolha. Recomendamos um Bucket S3.
